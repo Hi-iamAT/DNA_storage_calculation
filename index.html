@@ -701,15 +701,15 @@
                     <div>
                         <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-red-500/15 text-red-400 border border-red-500/30 rounded-full text-xs font-semibold mb-2 animate-pulse">
                             <span class="w-2 h-2 rounded-full bg-red-500"></span>
-                            <span>LIVE POSTER SESSION INTERACTION</span>
+                            <span>POLL OPEN — CAST YOUR VOTE</span>
                         </div>
                         <h2 class="text-2xl font-bold text-white">Audience & Judge Scientific Poll</h2>
-                        <p class="text-slate-400 text-sm">Real-time audience sentiment on bio-storage adoption, timeline, and research bottlenecks.</p>
+                        <p class="text-slate-400 text-sm">One vote per person, per question — on DNA storage adoption, timeline, and research bottlenecks.</p>
                     </div>
                     
-                    <button id="btn-reset-poll" class="px-3 py-1.5 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors">
-                        Reset Demo Baseline
-                    </button>
+                    <div class="text-[11px] font-mono text-slate-500 bg-slate-900/60 border border-slate-800 rounded-lg px-3 py-2 leading-relaxed">
+                        🔒 One vote per person, per question.<br>Saved privately on your device.
+                    </div>
                 </div>
 
                 <!-- 3 Interactive Polling Questions -->
@@ -768,7 +768,7 @@
                             </div>
                             <div class="flex justify-between items-center text-[11px] text-slate-500 pt-1">
                                 <span>Total Votes: <strong id="total-votes-trust" class="text-slate-300">0</strong></span>
-                                <span id="poll-status-trust" class="text-bio-emerald hidden font-semibold">✓ Voted</span>
+                                <span id="poll-status-trust" class="hidden items-center gap-2 text-bio-emerald font-semibold">✓ Voted <button id="poll-change-trust" class="text-[10px] px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-400 hover:text-white transition-colors">Change</button></span>
                             </div>
                         </div>
                     </div>
@@ -826,7 +826,7 @@
                             </div>
                             <div class="flex justify-between items-center text-[11px] text-slate-500 pt-1">
                                 <span>Total Votes: <strong id="total-votes-timeline" class="text-slate-300">0</strong></span>
-                                <span id="poll-status-timeline" class="text-bio-emerald hidden font-semibold">✓ Voted</span>
+                                <span id="poll-status-timeline" class="hidden items-center gap-2 text-bio-emerald font-semibold">✓ Voted <button id="poll-change-timeline" class="text-[10px] px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-400 hover:text-white transition-colors">Change</button></span>
                             </div>
                         </div>
                     </div>
@@ -884,7 +884,7 @@
                             </div>
                             <div class="flex justify-between items-center text-[11px] text-slate-500 pt-1">
                                 <span>Total Votes: <strong id="total-votes-bottleneck" class="text-slate-300">0</strong></span>
-                                <span id="poll-status-bottleneck" class="text-bio-emerald hidden font-semibold">✓ Voted</span>
+                                <span id="poll-status-bottleneck" class="hidden items-center gap-2 text-bio-emerald font-semibold">✓ Voted <button id="poll-change-bottleneck" class="text-[10px] px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-400 hover:text-white transition-colors">Change</button></span>
                             </div>
                         </div>
                     </div>
@@ -924,7 +924,7 @@
                 </div>
                 <div class="p-3.5 bg-slate-900/70 rounded-xl border border-slate-800">
                     <h4 class="text-sm font-bold text-amber-400 mb-1">Tab 4 — Live Poll</h4>
-                    <p class="text-xs text-slate-300 leading-relaxed">Cast your vote on the future of DNA storage! Your vote is saved on your device and added to the live results.</p>
+                    <p class="text-xs text-slate-300 leading-relaxed">Cast your vote on the future of DNA storage! One vote per question, saved privately on your device — and you can change it anytime with the "Change" button.</p>
                 </div>
             </div>
 

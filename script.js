@@ -42,9 +42,16 @@ const appState = {
     currentDnaSequence: 'ATCGGCTA',
     mutationRate: 0,
     pollVotes: {
-        trust: { yes: 68, unsure: 24, no: 12 },
-        timeline: { soon: 35, decade: 58, distant: 11 },
-        bottleneck: { cost: 62, speed: 28, error: 14 }
+        trust: { yes: 0, unsure: 0, no: 0 },
+        timeline: { soon: 0, decade: 0, distant: 0 },
+        bottleneck: { cost: 0, speed: 0, error: 0 }
+    },
+    // Records which option THIS device voted for in each category,
+    // enabling honest "change my vote" without double counting
+    myVotes: {
+        trust: null,
+        timeline: null,
+        bottleneck: null
     },
     userVoted: {
         trust: false,
@@ -1027,22 +1034,17 @@ function initPoll() {
     // Poll 3: Bottleneck
     setupPollButtons('bottleneck', ['cost', 'speed', 'error']);
 
-    const resetBtn = document.getElementById('btn-reset-poll');
-    if (resetBtn) {
-        resetBtn.addEventListener('click', () => {
-            localStorage.removeItem('dna_poster_votes');
-            localStorage.removeItem('dna_user_voted');
-            appState.pollEpoch = (appState.pollEpoch || 0) + 1; // cancel pending simulated votes
-            appState.pollVotes = {
-                trust: { yes: 68, unsure: 24, no: 12 },
-                timeline: { soon: 35, decade: 58, distant: 11 },
-                bottleneck: { cost: 62, speed: 28, error: 14 }
-            };
-            appState.userVoted = { trust: false, timeline: false, bottleneck: false };
-            renderAllPolls();
-            showToast('Poll reset to initial conference baseline!');
-        });
-    }
+    // Per-question "Change my vote" (retracts the previous vote first —
+    // no double counting, and no one can wipe anyone else's votes)
+    ['trust', 'timeline', 'bottleneck'].forEach(category => {
+        const changeBtn = document.getElementById(`poll-change-${category}`);
+        if (changeBtn) {
+            changeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                changeVote(category);
+            });
+        }
+    });
 }
 
 function setupPollButtons(pollCategory, options) {
@@ -1058,38 +1060,33 @@ function setupPollButtons(pollCategory, options) {
 
 function castVote(category, choice) {
     if (appState.userVoted[category]) {
-        showToast('You already voted in this category! Thanks for participating.');
+        showToast('You already voted in this category — use "Change" to switch your vote.');
         return;
     }
 
-    if (!appState.pollVotes[category][choice]) {
-        appState.pollVotes[category][choice] = 0;
-    }
     appState.pollVotes[category][choice]++;
+    appState.myVotes[category] = choice;
     appState.userVoted[category] = true;
 
-    // Epoch guard: a scheduled "simulated attendee" must never fire after
-    // the poll has been reset mid-wait.
-    const epoch = appState.pollEpoch || 0;
-
     saveVotesToStorage();
     renderAllPolls();
-    showToast('Vote counted! Results updated in real time.');
-
-    // Simulated attendees voting after 2 seconds
-    setTimeout(() => {
-        if ((appState.pollEpoch || 0) === epoch) {
-            simulateAttendeeVote(category);
-        }
-    }, 2000);
+    showToast('Vote counted! Thanks for participating.');
 }
 
-function simulateAttendeeVote(category) {
-    const keys = Object.keys(appState.pollVotes[category]);
-    const randomKey = keys[Math.floor(Math.random() * keys.length)];
-    appState.pollVotes[category][randomKey]++;
+/**
+ * Retract this device's previous vote in a category, allowing a new choice.
+ */
+function changeVote(category) {
+    const previousChoice = appState.myVotes[category];
+    if (previousChoice && appState.pollVotes[category][previousChoice] > 0) {
+        appState.pollVotes[category][previousChoice]--;
+    }
+    appState.myVotes[category] = null;
+    appState.userVoted[category] = false;
+
     saveVotesToStorage();
     renderAllPolls();
+    showToast('Previous vote removed — pick a new answer below.');
 }
 
 function renderAllPolls() {
@@ -1119,8 +1116,9 @@ function renderSinglePoll(category, options) {
     });
 
     const statusEl = document.getElementById(`poll-status-${category}`);
-    if (statusEl && appState.userVoted[category]) {
-        statusEl.classList.remove('hidden');
+    if (statusEl) {
+        statusEl.classList.toggle('hidden', !appState.userVoted[category]);
+        statusEl.classList.toggle('flex', !!appState.userVoted[category]);
     }
 }
 
@@ -1128,6 +1126,7 @@ function saveVotesToStorage() {
     try {
         localStorage.setItem('dna_poster_votes', JSON.stringify(appState.pollVotes));
         localStorage.setItem('dna_user_voted', JSON.stringify(appState.userVoted));
+        localStorage.setItem('dna_my_votes', JSON.stringify(appState.myVotes));
     } catch (e) {
         // LocalStorage might be disabled in sandboxed contexts
     }
@@ -1137,6 +1136,7 @@ function loadStoredVotes() {
     try {
         const storedVotes = localStorage.getItem('dna_poster_votes');
         const storedVoted = localStorage.getItem('dna_user_voted');
+        const storedMyVotes = localStorage.getItem('dna_my_votes');
         if (storedVotes) {
             const parsed = JSON.parse(storedVotes);
             // Merge over defaults so missing/stale keys never break rendering
@@ -1148,6 +1148,9 @@ function loadStoredVotes() {
         }
         if (storedVoted) {
             appState.userVoted = { trust: false, timeline: false, bottleneck: false, ...JSON.parse(storedVoted) };
+        }
+        if (storedMyVotes) {
+            appState.myVotes = { trust: null, timeline: null, bottleneck: null, ...JSON.parse(storedMyVotes) };
         }
     } catch (e) {}
 }
