@@ -22,12 +22,17 @@
     --accent-purple: #8b5cf6;
 }
 
+/* Prevent horizontal page scroll on phones (decorative glow layers,
+   long monospace strings, etc. must never widen the page itself) */
+html, body {
+    overflow-x: hidden;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
-}
-::-webkit-scrollbar-track {
+}::-webkit-scrollbar-track {
     background: #090e1a;
     border-radius: 4px;
 }
@@ -294,6 +299,12 @@
     h2.text-2xl {
         font-size: 1.35rem;
         line-height: 1.75rem;
+    }
+
+    /* Tab bar: scale icons with the smaller 2x2-grid labels */
+    header nav button svg {
+        width: 0.9rem;
+        height: 0.9rem;
     }
 
     /* Full-width slider value chip */
