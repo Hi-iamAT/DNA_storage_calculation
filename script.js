@@ -98,7 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initCalculator();
     initPipeline();
     initPoll();
-    initQRModal();
     initHelpModal();
     initWelcomeCard();
     loadStoredVotes();
@@ -1154,131 +1153,7 @@ function loadStoredVotes() {
 }
 
 // ============================================================================
-// 8. POSTER QR CODE MODAL & PRINT/SHARING UTILITIES
-// ============================================================================
-
-function initQRModal() {
-    const openBtn = document.getElementById('btn-open-qr');
-    const closeBtn = document.getElementById('btn-close-qr');
-    const modal = document.getElementById('qr-modal');
-    const qrInput = document.getElementById('qr-url-input');
-    const generateBtn = document.getElementById('btn-generate-qr');
-    const copyUrlBtn = document.getElementById('btn-copy-url');
-    const downloadQrBtn = document.getElementById('btn-download-qr');
-
-    if (openBtn && modal) {
-        openBtn.addEventListener('click', () => {
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            // Populate current URL if empty
-            if (qrInput && (!qrInput.value || qrInput.value === '')) {
-                qrInput.value = window.location.href.split('#')[0];
-            }
-            generateQRCode(qrInput ? qrInput.value : window.location.href);
-        });
-    }
-
-    if (closeBtn && modal) {
-        closeBtn.addEventListener('click', () => {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        });
-    }
-
-    // Click outside to close
-    if (modal) {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }
-        });
-    }
-
-    if (generateBtn && qrInput) {
-        generateBtn.addEventListener('click', () => {
-            generateQRCode(qrInput.value);
-        });
-    }
-
-    if (copyUrlBtn && qrInput) {
-        copyUrlBtn.addEventListener('click', () => {
-            copyToClipboard(qrInput.value, 'URL copied to clipboard!');
-        });
-    }
-
-    if (downloadQrBtn) {
-        downloadQrBtn.addEventListener('click', downloadQRImage);
-    }
-}
-
-/**
- * Robust Standalone QR Code Generator
- * Uses standard qrcode.js if available via CDN, or draws a crisp vector SVG QR matrix
- */
-function generateQRCode(textToEncode) {
-    const container = document.getElementById('qrcode-target');
-    if (!container) return;
-    container.innerHTML = '';
-
-    const text = textToEncode && textToEncode.trim().length > 0 
-        ? textToEncode.trim() 
-        : window.location.href;
-
-    // The QRCode library is vendored locally (vendor/qrcode.min.js), so it
-    // should always be available — even fully offline.
-    if (typeof QRCode !== 'undefined') {
-        new QRCode(container, {
-            text: text,
-            width: 190,
-            height: 190,
-            colorDark: "#070b14",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.M
-        });
-    } else {
-        container.innerHTML = '<p class="text-xs text-red-400 text-center px-4">QR library failed to load.<br>Open this page over a network connection once, then it will work offline too.</p>';
-    }
-}
-
-/**
- * Download the generated QR image (PNG from qrcode.js, or SVG fallback)
- */
-function downloadQRImage() {
-    const container = document.getElementById('qrcode-target');
-    if (!container) return;
-
-    // Check if it's an <img> (from qrcode.js) or <canvas> or <svg>
-    const img = container.querySelector('img');
-    const canvas = container.querySelector('canvas');
-    const svg = container.querySelector('svg');
-
-    if (img && img.src) {
-        triggerDownload(img.src, 'dna-storage-poster-qr.png');
-    } else if (canvas) {
-        triggerDownload(canvas.toDataURL('image/png'), 'dna-storage-poster-qr.png');
-    } else if (svg) {
-        const svgData = new XMLSerializer().serializeToString(svg);
-        const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-        const svgUrl = URL.createObjectURL(svgBlob);
-        triggerDownload(svgUrl, 'dna-storage-poster-qr.svg');
-    } else {
-        showToast('Please generate QR first.');
-    }
-}
-
-function triggerDownload(url, filename) {
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    showToast(`Downloaded ${filename} for your poster!`);
-}
-
-// ============================================================================
-// 8.5 HELP / HOW-TO-USE MODAL & WELCOME CARD (non-technical onboarding)
+// 8. HELP / HOW-TO-USE MODAL & WELCOME CARD (non-technical onboarding)
 // ============================================================================
 
 function initHelpModal() {
@@ -1303,12 +1178,10 @@ function initHelpModal() {
         });
     }
 
-    // ESC closes any open modal (help or QR)
+    // ESC closes the help modal
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             if (modal && !modal.classList.contains('hidden')) closeModal(modal);
-            const qrModal = document.getElementById('qr-modal');
-            if (qrModal && !qrModal.classList.contains('hidden')) closeModal(qrModal);
         }
     });
 }

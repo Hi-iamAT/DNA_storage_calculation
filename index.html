@@ -47,9 +47,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- QRCode.js Library (vendored locally for offline QR generation) -->
-    <script src="vendor/qrcode.min.js"></script>
-
     <!-- External Dedicated Stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
@@ -81,7 +78,7 @@
                 </div>
             </div>
 
-            <!-- Quick Action Badges & QR Modal Trigger -->
+            <!-- Quick Action Badges & Guide Button -->
             <div class="flex items-center gap-2">
                 <div class="hidden sm:flex items-center gap-2 text-xs font-mono text-slate-400 border border-slate-800 bg-slate-900/60 px-3 py-1.5 rounded-lg">
                     <span class="w-2 h-2 rounded-full bg-bio-emerald animate-ping"></span>
@@ -94,12 +91,6 @@
                 <button id="btn-open-help" class="flex items-center gap-2 px-3 py-1.5 bg-slate-900/60 hover:bg-slate-800 border border-slate-700 hover:border-bio-cyan/60 text-slate-300 hover:text-white text-xs font-semibold rounded-lg transition-all" title="New here? Open the 60-second guide">
                     <svg class="w-4 h-4 text-bio-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.917-.442.105-.994.166-1.994.166v1m0 0v2m-3 3h6a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     <span class="hidden sm:inline">How to Use</span>
-                </button>
-
-                <!-- QR Code Modal Button for Poster Attendees -->
-                <button id="btn-open-qr" class="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-bio-cyan/20 to-bio-emerald/20 hover:from-bio-cyan/30 hover:to-bio-emerald/30 border border-bio-cyan/40 hover:border-bio-cyan text-bio-cyan text-xs font-semibold rounded-lg transition-all shadow-[0_0_12px_rgba(6,182,212,0.2)]">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
-                    <span>Poster QR Code</span>
                 </button>
             </div>
         </div>
@@ -251,7 +242,7 @@
                             <span class="text-xs text-slate-400 font-mono" data-tooltip="Computers use 0s and 1s. DNA uses 4 letters — each DNA letter stores 2 bits.">Quaternary Encoding (2 bits/base)</span>
                         </div>
                         <div class="relative">
-                            <input type="text" id="textInput" value="DNA Storage: 215 Petabytes in 1 Gram" placeholder="Type text or scan poster QR..." 
+                            <input type="text" id="textInput" value="DNA Storage: 215 Petabytes in 1 Gram" placeholder="Type any message here — your name, a greeting, anything..."
                                 class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl px-4 py-3.5 text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-bio-cyan focus:border-transparent transition-all placeholder:text-slate-600 shadow-inner">
                         </div>
                     </div>
@@ -903,68 +894,6 @@
         </section>
 
     </main>
-
-    <!-- ====================================================================== -->
-    <!-- POSTER QR CODE MODAL DIALOG                                            -->
-    <!-- ====================================================================== -->
-    <div id="qr-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
-        <div class="glass-panel bg-slate-900 border border-bio-cyan/40 rounded-3xl max-w-md w-full p-6 sm:p-8 relative shadow-2xl animate-fade-in">
-            
-            <!-- Close Button -->
-            <button id="btn-close-qr" class="absolute top-5 right-5 text-slate-400 hover:text-white p-1 rounded-lg bg-slate-800/80 hover:bg-slate-700 transition-colors">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-
-            <div class="text-center mb-6">
-                <div class="inline-flex p-3 rounded-2xl bg-bio-cyan/15 text-bio-cyan border border-bio-cyan/30 mb-3 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
-                </div>
-                <h3 class="text-xl font-bold text-white">Poster Presentation Companion</h3>
-                <p class="text-xs text-slate-400 mt-1">Scan to test live molecular translation and vote from your smartphone.</p>
-            </div>
-
-            <!-- QR Code Display Area -->
-            <div class="flex justify-center mb-6">
-                <div class="qr-card-wrapper">
-                    <div id="qrcode-target" class="w-[190px] h-[190px] flex items-center justify-center">
-                        <!-- Populated dynamically by script.js -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Custom URL Input & Action Buttons -->
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-[11px] font-mono text-slate-400 mb-1">Target Web Application URL:</label>
-                    <div class="flex items-center gap-2">
-                        <input type="text" id="qr-url-input" placeholder="https://..." 
-                            class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs font-mono text-white focus:outline-none focus:ring-1 focus:ring-bio-cyan">
-                        <button id="btn-generate-qr" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium rounded-lg shrink-0 transition-colors">
-                            Update
-                        </button>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-2 pt-2">
-                    <button id="btn-copy-url" class="w-full py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold rounded-xl flex items-center justify-center gap-2 transition-colors">
-                        <svg class="w-4 h-4 text-bio-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                        <span>Copy Link</span>
-                    </button>
-                    <button id="btn-download-qr" class="w-full py-2.5 px-3 bg-gradient-to-r from-bio-cyan to-bio-emerald hover:opacity-90 text-bio-950 text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-opacity shadow-lg shadow-bio-cyan/20">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        <span>Download QR</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="mt-4 pt-4 border-t border-slate-800/80 text-center">
-                <p class="text-[11px] text-slate-500">
-                    💡 Tip: Download this QR image to paste directly into your printed research poster board!
-                </p>
-            </div>
-
-        </div>
-    </div>
 
     <!-- ====================================================================== -->
     <!-- HELP / HOW-TO-USE MODAL (plain-language guide for first-time visitors) -->

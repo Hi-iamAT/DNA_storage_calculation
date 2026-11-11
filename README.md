@@ -13,9 +13,8 @@ explore — no technical knowledge required.
 | **3. Storage Pipeline** | Tap through the 5 real stages of DNA storage: encoding → synthesis → encapsulation → sequencing → error-free recovery. |
 | **4. Live Poll** | Attendees vote on the future of DNA storage; results update live (saved per device). |
 
-Extra: animated 3D double-helix, poster QR generator (download as PNG/SVG for your
-printed board), plain-language tooltips on every scientific term, and a
-"How to Use" 60-second guide in the header.
+Extra: animated 3D double-helix, plain-language tooltips on every scientific term,
+and a "How to Use" 60-second guide in the header.
 
 ## 🚀 Running it
 
@@ -33,8 +32,9 @@ python3 -m http.server 8000
 **Option C — publish for the QR code (recommended):**
 1. Push this folder to a GitHub repo → **Settings → Pages → deploy from main branch**.
 2. Or drag the folder into [Netlify Drop](https://app.netlify.com/drop) — done.
-3. Open the app, click **Poster QR Code** in the header, enter the published URL,
-   and click **Download QR** to put the QR on your printed poster.
+3. Copy the published URL and generate your poster QR with any free online QR
+   generator (e.g., qr-code-generator.com or the QR tool built into Chrome's
+   share menu). Print that QR on your poster board.
 
 > ⚠️ Publish over **HTTPS** so the one-tap "copy" buttons work on attendees' phones
 > (clipboard API requires a secure context; a fallback for long-press copy is included).
