@@ -250,6 +250,92 @@
     transform: translateX(-50%) translateY(-2px);
 }
 
+/* ==========================================================================
+   Responsive Adjustments — Phones & Small Screens
+   Poster attendees mostly scan the QR and browse on their phones.
+   ========================================================================== */
+@media (max-width: 640px) {
+    /* Shorter hero simulation so tab content is visible without scrolling */
+    #helix-canvas-container {
+        height: 175px;
+    }
+
+    /* Comfortable touch targets for every interactive button
+       (platform guidelines: ~44px minimum) */
+    button {
+        min-height: 42px;
+    }
+    #helix-toggle-pause {
+        min-height: 36px;
+    }
+
+    /* Prevent iOS Safari auto-zoom when focusing text fields
+       (zoom triggers below 16px font size) */
+    input[type="text"],
+    input[type="number"],
+    textarea {
+        font-size: 16px !important;
+    }
+
+    /* Slightly tighter DNA base badges to fit more of the sequence per row */
+    .base-badge {
+        width: 20px;
+        height: 22px;
+        font-size: 0.75rem;
+        margin: 0.5px;
+    }
+
+    /* Keep hydrogen-bond symbols aligned with the tighter badges */
+    #out-dna-hbonds > span {
+        width: 20px !important;
+    }
+
+    /* Compact section headings a notch on small screens */
+    h2.text-2xl {
+        font-size: 1.35rem;
+        line-height: 1.75rem;
+    }
+
+    /* Full-width slider value chip */
+    #storageValue {
+        display: inline-block;
+    }
+
+    /* Hover effects don't exist on touch — neutralize lifts to avoid
+       stuck "floating" cards after a tap */
+    .pipeline-step:hover,
+    .base-badge:hover {
+        transform: none;
+    }
+}
+
+/* Ultra-narrow phones (< 380px) */
+@media (max-width: 380px) {
+    #helix-canvas-container {
+        height: 150px;
+    }
+    .base-badge {
+        width: 18px;
+        height: 21px;
+        font-size: 0.7rem;
+    }
+    #out-dna-hbonds > span {
+        width: 18px !important;
+    }
+    header h1 {
+        font-size: 1.05rem;
+    }
+    /* Tab labels wrap to two lines instead of overflowing */
+    #tab-btn-encoder span,
+    #tab-btn-calculator span,
+    #tab-btn-pipeline span,
+    #tab-btn-poll span {
+        white-space: normal;
+        line-height: 1.1;
+        text-align: center;
+    }
+}
+
 /* Print Layout for Poster Handout */
 @media print {
     body {
