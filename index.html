@@ -27,6 +27,14 @@
             </p>
         </header>
 
+        <!-- DNA helix banner (it spins with the bases of YOUR message) -->
+        <section class="mb-6">
+            <div id="helix-box" class="rounded-2xl border border-cyan-900/60 bg-slate-900 overflow-hidden">
+                <canvas id="helixCanvas" class="block w-full h-full"></canvas>
+            </div>
+            <p class="text-center text-[11px] text-slate-500 mt-1.5">Live double helix — it shows the DNA letters of your own message.</p>
+        </section>
+
         <main class="space-y-6">
 
             <!-- ============================================================ -->
@@ -166,6 +174,25 @@
             Based on: Church et al. (Science 2012) · Goldman et al. (Nature 2013) · Erlich &amp; Zielinski (Science 2017)<br>
             GENO_BYTE — educational demo. Runs entirely in your browser.
         </footer>
+    </div>
+
+    <!-- Welcome popup (shown on every visit, one tap to dismiss) -->
+    <div id="welcome-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
+            <div class="text-4xl mb-2">🧬</div>
+            <h2 class="text-xl font-bold text-white">Welcome to GENO_BYTE!</h2>
+            <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+                DNA isn't just the code of life — it can store <strong class="text-slate-200">your data</strong> too.
+            </p>
+            <ul class="text-sm text-slate-300 mt-4 space-y-2 text-left">
+                <li>1️⃣ &nbsp;Turn any message into DNA letters</li>
+                <li>2️⃣ &nbsp;See how little your data would weigh</li>
+                <li>3️⃣ &nbsp;Vote in the quick poll</li>
+            </ul>
+            <button id="btn-start" class="mt-6 w-full py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-colors">
+                Let's Go ▶
+            </button>
+        </div>
     </div>
 
     <!-- Toast -->

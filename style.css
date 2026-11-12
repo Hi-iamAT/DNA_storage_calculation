@@ -57,6 +57,19 @@ input[type="number"] {
     appearance: textfield;
 }
 
+/* DNA helix banner */
+#helix-box {
+    height: 170px;
+}
+@media (max-width: 380px) {
+    #helix-box { height: 140px; }
+}
+#helixCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
 /* Never allow horizontal page scroll on phones */
 html, body {
     overflow-x: hidden;

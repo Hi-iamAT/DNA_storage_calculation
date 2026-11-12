@@ -322,7 +322,159 @@ function loadVotes() {
 }
 
 // ============================================================================
-// 6. BOOT
+// 6. DNA HELIX BANNER (lightweight, auto-spinning, shows YOUR sequence)
+// ============================================================================
+
+const HELIX_BASE_COLORS = {
+    A: { fill: '#fb7185', glow: 'rgba(251,113,133,0.6)' },
+    C: { fill: '#38bdf8', glow: 'rgba(56,189,248,0.6)' },
+    G: { fill: '#34d399', glow: 'rgba(52,211,153,0.6)' },
+    T: { fill: '#fbbf24', glow: 'rgba(251,191,36,0.6)' }
+};
+
+function initHelix() {
+    const canvas = document.getElementById('helixCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let rotation = 0;
+    const COMPLEMENT = { A: 'T', T: 'A', C: 'G', G: 'C' };
+
+    function draw() {
+        const rect = canvas.getBoundingClientRect();
+        const w = rect.width, h = rect.height;
+        if (w === 0 || h === 0) { requestAnimationFrame(draw); return; }
+
+        // Keep the backing store matched to size & device pixel ratio
+        const dpr = window.devicePixelRatio || 1;
+        const bw = Math.round(w * dpr), bh = Math.round(h * dpr);
+        if (canvas.width !== bw || canvas.height !== bh) {
+            canvas.width = bw;
+            canvas.height = bh;
+        }
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, w, h);
+
+        rotation += 0.018;
+
+        // The helix displays the user's own encoded message
+        const seq = (appState.currentDna || 'ATCGCGTA').slice(0, 26);
+        const count = 24;
+        const spacing = w / (count - 1);
+        const radius = Math.min(h * 0.30, 58);
+        const centerY = h / 2;
+
+        const strandA = [], strandB = [];
+        for (let i = 0; i < count; i++) {
+            const angle = rotation + i * 0.45;
+            const base = seq[i % seq.length] || 'A';
+            const comp = COMPLEMENT[base] || 'T';
+            strandA.push({ x: i * spacing, y: centerY + Math.sin(angle) * radius, z: Math.cos(angle), base });
+            strandB.push({ x: i * spacing, y: centerY + Math.sin(angle + Math.PI) * radius, z: Math.cos(angle + Math.PI), base: comp });
+        }
+
+        // Draw rungs back-to-front for a 3D feel
+        const rungs = strandA.map((p1, i) => ({ p1, p2: strandB[i], z: (p1.z + strandB[i].z) / 2 }))
+            .sort((a, b) => a.z - b.z);
+
+        for (const { p1, p2, z } of rungs) {
+            const alpha = 0.35 + (z + 1) * 0.3;
+            const isCG = p1.base === 'C' || p1.base === 'G';
+            ctx.strokeStyle = isCG ? `rgba(6,182,212,${alpha * 0.7})` : `rgba(251,191,36,${alpha * 0.6})`;
+            ctx.lineWidth = isCG ? 2.2 : 1.6;
+            ctx.setLineDash(isCG ? [4, 3] : [6, 4]);
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            drawBase(ctx, p1, alpha);
+            drawBase(ctx, p2, alpha);
+        }
+
+        drawStrand(ctx, strandA, '#22d3ee');
+        drawStrand(ctx, strandB, '#a78bfa');
+
+        requestAnimationFrame(draw);
+    }
+
+    function drawBase(ctx, p, alpha) {
+        const color = HELIX_BASE_COLORS[p.base] || { fill: '#94a3b8', glow: 'rgba(148,163,184,0.5)' };
+        const scale = 0.7 + (p.z + 1) * 0.26;
+        const r = 6 * scale;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0.4, 0.5 + (p.z + 1) * 0.24);
+        const grad = ctx.createRadialGradient(p.x - r * 0.3, p.y - r * 0.3, r * 0.1, p.x, p.y, r);
+        grad.addColorStop(0, '#ffffff');
+        grad.addColorStop(0.35, color.fill);
+        grad.addColorStop(1, '#050811');
+        ctx.fillStyle = grad;
+        ctx.shadowColor = color.glow;
+        ctx.shadowBlur = scale > 1 ? 10 : 3;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+        ctx.fill();
+        if (p.z > 0.2) {
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = '#fff';
+            ctx.font = `bold ${Math.round(7.5 * scale)}px monospace`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(p.base, p.x, p.y);
+        }
+        ctx.restore();
+    }
+
+    function drawStrand(ctx, points, color) {
+        if (points.length < 2) return;
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i++) {
+            const xc = (points[i].x + points[i - 1].x) / 2;
+            const yc = (points[i].y + points[i - 1].y) / 2;
+            ctx.quadraticCurveTo(points[i - 1].x, points[i - 1].y, xc, yc);
+        }
+        ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.5;
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 8;
+        ctx.stroke();
+        ctx.restore();
+    }
+
+    requestAnimationFrame(draw);
+}
+
+// ============================================================================
+// 7. WELCOME POPUP (shown on every visit)
+// ============================================================================
+
+function initWelcome() {
+    const modal = document.getElementById('welcome-modal');
+    const startBtn = document.getElementById('btn-start');
+    if (!modal) return;
+
+    const open = () => {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    };
+    const close = () => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    };
+
+    if (startBtn) startBtn.addEventListener('click', close);
+    modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) close();
+    });
+
+    open(); // greet every visitor
+}
+
+// ============================================================================
+// 8. BOOT
 // ============================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -330,5 +482,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initConverter();
     initCalculator();
     initPoll();
+    initHelix();
+    initWelcome();
     updateWeight(256); // sensible starting example
 });
