@@ -16,7 +16,7 @@
 </head>
 <body class="bg-slate-950 text-slate-200 min-h-screen font-sans">
 
-    <div class="max-w-2xl mx-auto px-4 py-6 sm:py-10">
+    <div class="max-w-2xl lg:max-w-5xl mx-auto px-4 py-6 sm:py-10">
 
         <!-- Header -->
         <header class="text-center mb-8">
@@ -35,7 +35,7 @@
             <p class="text-center text-[11px] text-slate-500 mt-1.5">Live double helix — it shows the DNA letters of your own message.</p>
         </section>
 
-        <main class="space-y-6">
+        <main class="space-y-6 lg:grid lg:grid-cols-2 lg:gap-6 lg:space-y-0 lg:items-start">
 
             <!-- ============================================================ -->
             <!-- 1 · TEXT ⇄ DNA                                               -->
@@ -45,13 +45,18 @@
                 <p class="text-xs text-slate-400 mt-1 mb-4">
                     Computers store 0s and 1s. DNA stores letters: <span class="dna-a font-bold">A</span>
                     <span class="dna-c font-bold">C</span> <span class="dna-g font-bold">G</span>
-                    <span class="dna-t font-bold">T</span>. Every letter you type becomes DNA letters.
+                    <span class="dna-t font-bold">T</span>. Every 2 bits of binary become exactly one DNA letter.
                 </p>
 
                 <label for="textInput" class="block text-xs font-semibold text-slate-300 mb-1">Your message</label>
                 <input type="text" id="textInput" value="Hello DNA!"
                     placeholder="Type anything — your name, a greeting..."
                     class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:ring-2 focus:ring-cyan-500">
+
+                <div class="mt-3">
+                    <span class="text-xs font-semibold text-slate-300">As binary (0s &amp; 1s)</span>
+                    <div id="binaryOut" class="mt-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 font-mono text-xs text-slate-400 break-all max-h-24 overflow-y-auto leading-relaxed"></div>
+                </div>
 
                 <div class="mt-3">
                     <div class="flex items-center justify-between mb-1">
@@ -116,7 +121,7 @@
             <!-- ============================================================ -->
             <!-- 3 · POLL                                                     -->
             <!-- ============================================================ -->
-            <section class="bg-slate-900 rounded-2xl p-5 border border-slate-800">
+            <section class="bg-slate-900 rounded-2xl p-5 border border-slate-800 lg:col-span-2">
                 <h2 class="font-bold text-white text-lg">3 · Vote! <span class="text-xs font-normal text-slate-400">(one vote each, saved on your phone)</span></h2>
 
                 <!-- Question 1 -->

@@ -103,11 +103,13 @@ function initConverter() {
 function encodeTextToDna() {
     const inputEl = document.getElementById('textInput');
     const out = document.getElementById('dnaOut');
+    const binOut = document.getElementById('binaryOut');
     if (!inputEl || !out) return;
 
     const input = inputEl.value;
     if (!input) {
         out.innerHTML = '<span class="text-slate-600">Type something above…</span>';
+        if (binOut) binOut.innerHTML = '<span class="text-slate-600">…</span>';
         appState.currentDna = '';
         return;
     }
@@ -116,6 +118,12 @@ function encodeTextToDna() {
     let binary = '';
     for (const byte of new TextEncoder().encode(input)) {
         binary += byte.toString(2).padStart(8, '0');
+    }
+
+    // Show the binary layer, grouped in 8-bit bytes for readability
+    if (binOut) {
+        const bytes = binary.match(/.{1,8}/g) || [];
+        binOut.textContent = bytes.join(' ');
     }
 
     let dna = '';
