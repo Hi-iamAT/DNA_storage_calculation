@@ -97,6 +97,14 @@ function initConverter() {
         });
     }
 
+    const clearBtn = document.getElementById('btn-clear-text');
+    if (clearBtn) clearBtn.addEventListener('click', () => {
+        textInput.value = '';
+        encodeTextToDna(); // resets binary + DNA outputs to placeholders
+        textInput.focus();
+        showToast('Cleared — type something new!');
+    });
+
     if (dnaInput) dnaInput.addEventListener('input', decodeDnaToText);
 }
 

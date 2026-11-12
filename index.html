@@ -48,7 +48,10 @@
                     <span class="dna-t font-bold">T</span>. Every 2 bits of binary become exactly one DNA letter.
                 </p>
 
-                <label for="textInput" class="block text-xs font-semibold text-slate-600 mb-1">Your message</label>
+                <div class="flex items-center justify-between mb-1">
+                    <label for="textInput" class="block text-xs font-semibold text-slate-600">Your message</label>
+                    <button id="btn-clear-text" class="mini-btn" title="Erase the message and start a new one">✕ Clear</button>
+                </div>
                 <input type="text" id="textInput" value="Hello DNA!"
                     placeholder="Type anything — your name, a greeting..."
                     class="field w-full">
