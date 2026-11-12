@@ -233,14 +233,31 @@ function updateWeight(gb) {
 }
 
 // ============================================================================
-// 5. POLL (one vote per person per question, saved on this device)
+// 5. LIVE POLL (Supabase — shared, live counts; falls back to per-device)
 // ============================================================================
+
+// --- Your Supabase project (Settings -> API) --------------------------------
+const SUPABASE_URL = 'https://eittpkiyeublfkewbqlw.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_qgZL_hEvHeDm744Jdii4kg_rqKjA7_9'; // anon/publishable key
+// ----------------------------------------------------------------------------
 
 const POLL_OPTIONS = {
     trust: ['yes', 'unsure', 'no'],
     timeline: ['soon', 'decade', 'distant'],
     bottleneck: ['cost', 'speed', 'error']
 };
+
+let supabaseClient = null;
+let liveMode = false;
+
+function getVoterId() {
+    let id = localStorage.getItem('dna_voter_id');
+    if (!id) {
+        id = (crypto.randomUUID ? crypto.randomUUID() : 'v-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+        localStorage.setItem('dna_voter_id', id);
+    }
+    return id;
+}
 
 function initPoll() {
     for (const [category, options] of Object.entries(POLL_OPTIONS)) {
@@ -251,14 +268,108 @@ function initPoll() {
         const changeBtn = document.getElementById(`poll-change-${category}`);
         if (changeBtn) changeBtn.addEventListener('click', () => changeVote(category));
     }
+    setupLivePoll();
+}
+
+/* ---------- Live mode (shared counts, visible to everyone) ---------- */
+
+async function setupLivePoll() {
+    if (!window.supabase) { setOfflineMode('Live results unavailable — votes saved on this device only.'); return; }
+    try {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const { data, error } = await supabaseClient
+            .from('dna_poll_votes')
+            .select('question,choice,voter_id');
+        if (error) throw error;
+
+        liveMode = true;
+        applyServerRows(data || []);
+
+        // Push updates to every connected screen within ~1 second
+        supabaseClient
+            .channel('dna-poll')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'dna_poll_votes' }, refreshLiveCounts)
+            .subscribe();
+
+        renderAllPolls();
+    } catch (e) {
+        setOfflineMode('Live results unavailable — votes saved on this device only.');
+    }
+}
+
+async function refreshLiveCounts() {
+    if (!liveMode || !supabaseClient) return;
+    try {
+        const { data, error } = await supabaseClient
+            .from('dna_poll_votes')
+            .select('question,choice,voter_id');
+        if (error) throw error;
+        applyServerRows(data || []);
+        renderAllPolls();
+    } catch (e) { /* keep last known counts */ }
+}
+
+/** Rebuild all poll state from the server's single source of truth. */
+function applyServerRows(rows) {
+    const votes = {
+        trust: { yes: 0, unsure: 0, no: 0 },
+        timeline: { soon: 0, decade: 0, distant: 0 },
+        bottleneck: { cost: 0, speed: 0, error: 0 }
+    };
+    const voters = new Set();
+    const mine = {};
+
+    for (const row of rows) {
+        if (votes[row.question] && row.choice in votes[row.question]) {
+            votes[row.question][row.choice]++;
+        }
+        voters.add(row.voter_id);
+        if (row.voter_id === getVoterId() && (POLL_OPTIONS[row.question] || []).includes(row.choice)) {
+            mine[row.question] = row.choice;
+        }
+    }
+
+    appState.pollVotes = votes;
+    appState.myVotes = { trust: mine.trust || null, timeline: mine.timeline || null, bottleneck: mine.bottleneck || null };
+    appState.userVoted = {
+        trust: !!mine.trust,
+        timeline: !!mine.timeline,
+        bottleneck: !!mine.bottleneck
+    };
+
+    const note = document.getElementById('poll-live-note');
+    if (note) note.innerHTML = `👥 <strong class="text-slate-800">${voters.size}</strong> ${voters.size === 1 ? 'person has' : 'people have'} voted · <span class="text-orange-600 font-semibold">LIVE</span>`;
+}
+
+function setOfflineMode(message) {
+    liveMode = false;
+    const note = document.getElementById('poll-live-note');
+    if (note) note.textContent = message;
     renderAllPolls();
 }
 
-function castVote(category, choice) {
+/* ---------- Voting ---------- */
+
+async function castVote(category, choice) {
     if (appState.userVoted[category]) {
         showToast('Already voted — use "change" to switch.');
         return;
     }
+
+    if (liveMode && supabaseClient) {
+        const { error } = await supabaseClient
+            .from('dna_poll_votes')
+            .insert({ question: category, choice, voter_id: getVoterId() });
+        if (error) {
+            showToast(String(error.code) === '23505' ? 'Already voted in this question!' : 'Vote failed — please try again.');
+            return;
+        }
+        await refreshLiveCounts();
+        showToast('Vote counted — live on every screen!');
+        return;
+    }
+
+    // Offline fallback: per-device counting (previous behaviour)
     appState.pollVotes[category][choice]++;
     appState.myVotes[category] = choice;
     appState.userVoted[category] = true;
@@ -267,7 +378,19 @@ function castVote(category, choice) {
     showToast('Vote counted — thanks!');
 }
 
-function changeVote(category) {
+async function changeVote(category) {
+    if (liveMode && supabaseClient) {
+        await supabaseClient
+            .from('dna_poll_votes')
+            .delete()
+            .eq('voter_id', getVoterId())
+            .eq('question', category);
+        await refreshLiveCounts();
+        showToast('Vote removed — pick a new answer.');
+        return;
+    }
+
+    // Offline fallback
     const prev = appState.myVotes[category];
     if (prev && appState.pollVotes[category][prev] > 0) {
         appState.pollVotes[category][prev]--;
