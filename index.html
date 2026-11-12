@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="GENO_BYTE: A simple interactive demo of DNA data storage. Turn text into DNA, see how much data fits in a gram, and vote in the audience poll.">
-    <meta name="theme-color" content="#070b14">
+    <meta name="theme-color" content="#e3eef9">
     <title>GENO_BYTE — DNA Data Storage, Simply</title>
 
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='19' font-size='19'%3E%F0%9F%A7%AC%3C/text%3E%3C/svg%3E">
@@ -14,14 +14,14 @@
 
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-slate-950 text-slate-200 min-h-screen font-sans">
+<body class="bg-page text-slate-700 min-h-screen font-sans">
 
     <div class="max-w-2xl lg:max-w-5xl mx-auto px-4 py-6 sm:py-10">
 
         <!-- Header -->
         <header class="text-center mb-8">
-            <h1 class="text-2xl sm:text-3xl font-bold text-white">🧬 GENO_BYTE</h1>
-            <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-800">🧬 GENO_BYTE</h1>
+            <p class="text-sm text-slate-500 mt-2 leading-relaxed">
                 DNA can work like a hard drive. Try it yourself below —<br class="hidden sm:block">
                 three simple demos. You can't break anything.
             </p>
@@ -29,7 +29,7 @@
 
         <!-- DNA helix banner (it spins with the bases of YOUR message) -->
         <section class="mb-6">
-            <div id="helix-box" class="rounded-2xl border border-cyan-900/60 bg-slate-900 overflow-hidden">
+            <div id="helix-box" class="rounded-2xl border border-mist shadow-soft bg-inset overflow-hidden">
                 <canvas id="helixCanvas" class="block w-full h-full"></canvas>
             </div>
             <p class="text-center text-[11px] text-slate-500 mt-1.5">Live double helix — it shows the DNA letters of your own message.</p>
@@ -40,43 +40,43 @@
             <!-- ============================================================ -->
             <!-- 1 · TEXT ⇄ DNA                                               -->
             <!-- ============================================================ -->
-            <section class="bg-slate-900 rounded-2xl p-5 border border-slate-800">
-                <h2 class="font-bold text-white text-lg">1 · Type words, get DNA</h2>
-                <p class="text-xs text-slate-400 mt-1 mb-4">
+            <section class="bg-card rounded-2xl p-5 border border-mist shadow-soft">
+                <h2 class="font-bold text-slate-800 text-lg">1 · Type words, get DNA</h2>
+                <p class="text-xs text-slate-500 mt-1 mb-4">
                     Computers store 0s and 1s. DNA stores letters: <span class="dna-a font-bold">A</span>
                     <span class="dna-c font-bold">C</span> <span class="dna-g font-bold">G</span>
                     <span class="dna-t font-bold">T</span>. Every 2 bits of binary become exactly one DNA letter.
                 </p>
 
-                <label for="textInput" class="block text-xs font-semibold text-slate-300 mb-1">Your message</label>
+                <label for="textInput" class="block text-xs font-semibold text-slate-600 mb-1">Your message</label>
                 <input type="text" id="textInput" value="Hello DNA!"
                     placeholder="Type anything — your name, a greeting..."
-                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    class="field w-full">
 
                 <div class="mt-3">
-                    <span class="text-xs font-semibold text-slate-300">As binary (0s &amp; 1s)</span>
-                    <div id="binaryOut" class="mt-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 font-mono text-xs text-slate-400 break-all max-h-24 overflow-y-auto leading-relaxed"></div>
+                    <span class="text-xs font-semibold text-slate-600">As binary (0s &amp; 1s)</span>
+                    <div id="binaryOut" class="mt-1 output-box font-mono text-xs text-slate-500 max-h-24 overflow-y-auto"></div>
                 </div>
 
                 <div class="mt-3">
                     <div class="flex items-center justify-between mb-1">
-                        <span class="text-xs font-semibold text-slate-300">As DNA</span>
-                        <button id="btn-copy-dna" class="text-xs px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 transition-colors">Copy</button>
+                        <span class="text-xs font-semibold text-slate-600">As DNA</span>
+                        <button id="btn-copy-dna" class="mini-btn">Copy</button>
                     </div>
-                    <div id="dnaOut" class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 font-mono text-sm break-all min-h-[3rem] text-slate-300"></div>
+                    <div id="dnaOut" class="output-box font-mono text-sm min-h-[3rem]"></div>
                 </div>
 
-                <button id="btn-roundtrip" class="mt-3 w-full py-2.5 rounded-xl bg-emerald-600/15 hover:bg-emerald-600/25 border border-emerald-600/40 text-emerald-400 text-sm font-semibold transition-colors">
+                <button id="btn-roundtrip" class="mt-3 w-full py-2.5 rounded-xl bg-orange-600/10 hover:bg-orange-600/20 border border-orange-600/40 text-orange-700 text-sm font-semibold transition-colors">
                     ↓ Read this DNA back as text
                 </button>
 
-                <div class="mt-5 pt-5 border-t border-slate-800">
-                    <label for="dnaInput" class="block text-xs font-semibold text-slate-300 mb-1">Paste DNA letters (A, C, G, T)</label>
+                <div class="mt-5 pt-5 border-t border-mist">
+                    <label for="dnaInput" class="block text-xs font-semibold text-slate-600 mb-1">Paste DNA letters (A, C, G, T)</label>
                     <textarea id="dnaInput" rows="2" placeholder="e.g. ATCGGCTA"
-                        class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-cyan-300 font-mono text-base uppercase focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none"></textarea>
+                        class="field w-full font-mono uppercase resize-none text-orange-800"></textarea>
                     <div class="mt-3">
-                        <span class="text-xs font-semibold text-slate-300">Reads as text</span>
-                        <div id="textOut" class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm break-all min-h-[3rem] mt-1"></div>
+                        <span class="text-xs font-semibold text-slate-600">Reads as text</span>
+                        <div id="textOut" class="output-box text-slate-800 text-sm min-h-[3rem] mt-1"></div>
                     </div>
                 </div>
             </section>
@@ -84,36 +84,35 @@
             <!-- ============================================================ -->
             <!-- 2 · DATA → WEIGHT                                            -->
             <!-- ============================================================ -->
-            <section class="bg-slate-900 rounded-2xl p-5 border border-slate-800">
-                <h2 class="font-bold text-white text-lg">2 · How heavy is your data in DNA?</h2>
-                <p class="text-xs text-slate-400 mt-1 mb-4">
-                    One gram of DNA can hold about <strong class="text-cyan-400">215 Petabytes</strong> —
+            <section class="bg-card rounded-2xl p-5 border border-mist shadow-soft">
+                <h2 class="font-bold text-slate-800 text-lg">2 · How heavy is your data in DNA?</h2>
+                <p class="text-xs text-slate-500 mt-1 mb-4">
+                    One gram of DNA can hold about <strong class="text-orange-700">215 Petabytes</strong> —
                     pick an amount and see how little it would weigh.
                 </p>
 
                 <div class="grid grid-cols-2 gap-2 mb-4">
-                    <button id="btn-genome"  class="preset-btn">Human Genome<br><span class="text-slate-500">3 GB</span></button>
-                    <button id="btn-phone"   class="preset-btn">Smartphone<br><span class="text-slate-500">256 GB</span></button>
-                    <button id="btn-movies"  class="preset-btn">All Movies Ever<br><span class="text-slate-500">~50 PB</span></button>
-                    <button id="btn-internet" class="preset-btn">Whole Internet<br><span class="text-slate-500">~175 ZB</span></button>
+                    <button id="btn-genome"  class="preset-btn">Human Genome<br><span class="text-slate-400">3 GB</span></button>
+                    <button id="btn-phone"   class="preset-btn">Smartphone<br><span class="text-slate-400">256 GB</span></button>
+                    <button id="btn-movies"  class="preset-btn">All Movies Ever<br><span class="text-slate-400">~50 PB</span></button>
+                    <button id="btn-internet" class="preset-btn">Whole Internet<br><span class="text-slate-400">~175 ZB</span></button>
                 </div>
 
-                <label for="gbInput" class="block text-xs font-semibold text-slate-300 mb-1">Or type any amount (GB)</label>
-                <input type="number" id="gbInput" min="0.001" step="any" placeholder="e.g. 500"
-                    class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white text-base focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <label for="gbInput" class="block text-xs font-semibold text-slate-600 mb-1">Or type any amount (GB)</label>
+                <input type="number" id="gbInput" min="0.001" step="any" placeholder="e.g. 500" class="field w-full">
 
                 <div class="mt-4 space-y-2">
-                    <div class="p-3 bg-slate-950 rounded-xl border border-cyan-900/60">
-                        <span class="text-[11px] text-slate-400 block">Perfect lab result (215 PB per gram)</span>
-                        <span id="result-theoretical" class="text-xl font-bold text-cyan-300">—</span>
+                    <div class="p-3 bg-inset rounded-xl border border-orange-300/60">
+                        <span class="text-[11px] text-slate-500 block">Perfect lab result (215 PB per gram)</span>
+                        <span id="result-theoretical" class="text-xl font-bold text-orange-700">—</span>
                     </div>
-                    <div class="p-3 bg-slate-950 rounded-xl border border-emerald-900/60">
-                        <span class="text-[11px] text-slate-400 block">Real-world today (~10 PB per gram)</span>
-                        <span id="result-practical" class="text-xl font-bold text-emerald-300">—</span>
+                    <div class="p-3 bg-inset rounded-xl border border-sky-300/60">
+                        <span class="text-[11px] text-slate-500 block">Real-world today (~10 PB per gram)</span>
+                        <span id="result-practical" class="text-xl font-bold text-sky-700">—</span>
                     </div>
                 </div>
 
-                <p id="result-comparison" class="mt-4 text-sm text-slate-300 leading-relaxed bg-slate-950/60 rounded-xl p-3 border border-slate-800">
+                <p id="result-comparison" class="mt-4 text-sm text-slate-600 leading-relaxed bg-inset rounded-xl p-3 border border-mist">
                     Pick an amount above to see a fun comparison.
                 </p>
             </section>
@@ -121,55 +120,55 @@
             <!-- ============================================================ -->
             <!-- 3 · POLL                                                     -->
             <!-- ============================================================ -->
-            <section class="bg-slate-900 rounded-2xl p-5 border border-slate-800 lg:col-span-2">
-                <h2 class="font-bold text-white text-lg">3 · Vote! <span class="text-xs font-normal text-slate-400">(one vote each, saved on your phone)</span></h2>
+            <section class="bg-card rounded-2xl p-5 border border-mist shadow-soft lg:col-span-2">
+                <h2 class="font-bold text-slate-800 text-lg">3 · Vote! <span class="text-xs font-normal text-slate-500">(one vote each, saved on your phone)</span></h2>
 
                 <!-- Question 1 -->
-                <div class="mt-4 pt-4 border-t border-slate-800 first:border-0 first:pt-0">
-                    <h3 class="text-sm font-semibold text-white">Would you store your photos in DNA for 1,000 years?</h3>
+                <div class="mt-4 pt-4 border-t border-mist first:border-0 first:pt-0">
+                    <h3 class="text-sm font-semibold text-slate-800">Would you store your photos in DNA for 1,000 years?</h3>
                     <div class="grid grid-cols-3 gap-2 mt-2">
                         <button id="poll-btn-trust-yes"    class="vote-btn">Yes</button>
                         <button id="poll-btn-trust-unsure" class="vote-btn">Unsure</button>
                         <button id="poll-btn-trust-no"     class="vote-btn">No</button>
                     </div>
                     <div class="mt-2 space-y-1.5">
-                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-400">Yes</span><div class="flex-1 bg-slate-800 rounded-full h-2"><div id="bar-trust-yes" class="poll-bar bg-cyan-500"></div></div><span id="pct-trust-yes" class="w-8 text-right font-mono text-slate-300">0%</span></div>
-                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-400">Unsure</span><div class="flex-1 bg-slate-800 rounded-full h-2"><div id="bar-trust-unsure" class="poll-bar bg-amber-400"></div></div><span id="pct-trust-unsure" class="w-8 text-right font-mono text-slate-300">0%</span></div>
-                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-400">No</span><div class="flex-1 bg-slate-800 rounded-full h-2"><div id="bar-trust-no" class="poll-bar bg-rose-500"></div></div><span id="pct-trust-no" class="w-8 text-right font-mono text-slate-300">0%</span></div>
+                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-500">Yes</span><div class="flex-1 bg-sand/60 rounded-full h-2"><div id="bar-trust-yes" class="poll-bar bg-orange-500"></div></div><span id="pct-trust-yes" class="w-8 text-right font-mono text-slate-600">0%</span></div>
+                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-500">Unsure</span><div class="flex-1 bg-sand/60 rounded-full h-2"><div id="bar-trust-unsure" class="poll-bar bg-sky-500"></div></div><span id="pct-trust-unsure" class="w-8 text-right font-mono text-slate-600">0%</span></div>
+                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-500">No</span><div class="flex-1 bg-sand/60 rounded-full h-2"><div id="bar-trust-no" class="poll-bar bg-rose-500"></div></div><span id="pct-trust-no" class="w-8 text-right font-mono text-slate-600">0%</span></div>
                     </div>
-                    <p class="mt-2 text-[11px] text-slate-500">Votes: <span id="total-votes-trust">0</span> <span id="poll-status-trust" class="hidden text-emerald-400">· You voted ✓ <button id="poll-change-trust" class="underline hover:text-white">change</button></span></p>
+                    <p class="mt-2 text-[11px] text-slate-500">Votes: <span id="total-votes-trust">0</span> <span id="poll-status-trust" class="hidden text-sky-700">· You voted ✓ <button id="poll-change-trust" class="underline hover:text-slate-800">change</button></span></p>
                 </div>
 
                 <!-- Question 2 -->
-                <div class="mt-4 pt-4 border-t border-slate-800">
-                    <h3 class="text-sm font-semibold text-white">When will DNA storage hit data centers?</h3>
+                <div class="mt-4 pt-4 border-t border-mist">
+                    <h3 class="text-sm font-semibold text-slate-800">When will DNA storage hit data centers?</h3>
                     <div class="grid grid-cols-3 gap-2 mt-2">
                         <button id="poll-btn-timeline-soon"    class="vote-btn">&lt;5 yrs</button>
                         <button id="poll-btn-timeline-decade"  class="vote-btn">5–10 yrs</button>
                         <button id="poll-btn-timeline-distant" class="vote-btn">10+ yrs</button>
                     </div>
                     <div class="mt-2 space-y-1.5">
-                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-400">&lt;5 yrs</span><div class="flex-1 bg-slate-800 rounded-full h-2"><div id="bar-timeline-soon" class="poll-bar bg-cyan-500"></div></div><span id="pct-timeline-soon" class="w-8 text-right font-mono text-slate-300">0%</span></div>
-                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-400">5–10</span><div class="flex-1 bg-slate-800 rounded-full h-2"><div id="bar-timeline-decade" class="poll-bar bg-cyan-500"></div></div><span id="pct-timeline-decade" class="w-8 text-right font-mono text-slate-300">0%</span></div>
-                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-400">10+</span><div class="flex-1 bg-slate-800 rounded-full h-2"><div id="bar-timeline-distant" class="poll-bar bg-cyan-500"></div></div><span id="pct-timeline-distant" class="w-8 text-right font-mono text-slate-300">0%</span></div>
+                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-500">&lt;5 yrs</span><div class="flex-1 bg-sand/60 rounded-full h-2"><div id="bar-timeline-soon" class="poll-bar bg-sky-500"></div></div><span id="pct-timeline-soon" class="w-8 text-right font-mono text-slate-600">0%</span></div>
+                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-500">5–10</span><div class="flex-1 bg-sand/60 rounded-full h-2"><div id="bar-timeline-decade" class="poll-bar bg-orange-500"></div></div><span id="pct-timeline-decade" class="w-8 text-right font-mono text-slate-600">0%</span></div>
+                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-500">10+</span><div class="flex-1 bg-sand/60 rounded-full h-2"><div id="bar-timeline-distant" class="poll-bar bg-sky-600"></div></div><span id="pct-timeline-distant" class="w-8 text-right font-mono text-slate-600">0%</span></div>
                     </div>
-                    <p class="mt-2 text-[11px] text-slate-500">Votes: <span id="total-votes-timeline">0</span> <span id="poll-status-timeline" class="hidden text-emerald-400">· You voted ✓ <button id="poll-change-timeline" class="underline hover:text-white">change</button></span></p>
+                    <p class="mt-2 text-[11px] text-slate-500">Votes: <span id="total-votes-timeline">0</span> <span id="poll-status-timeline" class="hidden text-sky-700">· You voted ✓ <button id="poll-change-timeline" class="underline hover:text-slate-800">change</button></span></p>
                 </div>
 
                 <!-- Question 3 -->
-                <div class="mt-4 pt-4 border-t border-slate-800">
-                    <h3 class="text-sm font-semibold text-white">Biggest barrier today?</h3>
+                <div class="mt-4 pt-4 border-t border-mist">
+                    <h3 class="text-sm font-semibold text-slate-800">Biggest barrier today?</h3>
                     <div class="grid grid-cols-3 gap-2 mt-2">
                         <button id="poll-btn-bottleneck-cost"  class="vote-btn">Cost</button>
                         <button id="poll-btn-bottleneck-speed" class="vote-btn">Speed</button>
                         <button id="poll-btn-bottleneck-error" class="vote-btn">Errors</button>
                     </div>
                     <div class="mt-2 space-y-1.5">
-                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-400">Cost</span><div class="flex-1 bg-slate-800 rounded-full h-2"><div id="bar-bottleneck-cost" class="poll-bar bg-cyan-500"></div></div><span id="pct-bottleneck-cost" class="w-8 text-right font-mono text-slate-300">0%</span></div>
-                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-400">Speed</span><div class="flex-1 bg-slate-800 rounded-full h-2"><div id="bar-bottleneck-speed" class="poll-bar bg-cyan-500"></div></div><span id="pct-bottleneck-speed" class="w-8 text-right font-mono text-slate-300">0%</span></div>
-                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-400">Errors</span><div class="flex-1 bg-slate-800 rounded-full h-2"><div id="bar-bottleneck-error" class="poll-bar bg-cyan-500"></div></div><span id="pct-bottleneck-error" class="w-8 text-right font-mono text-slate-300">0%</span></div>
+                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-500">Cost</span><div class="flex-1 bg-sand/60 rounded-full h-2"><div id="bar-bottleneck-cost" class="poll-bar bg-orange-500"></div></div><span id="pct-bottleneck-cost" class="w-8 text-right font-mono text-slate-600">0%</span></div>
+                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-500">Speed</span><div class="flex-1 bg-sand/60 rounded-full h-2"><div id="bar-bottleneck-speed" class="poll-bar bg-sky-500"></div></div><span id="pct-bottleneck-speed" class="w-8 text-right font-mono text-slate-600">0%</span></div>
+                        <div class="flex items-center gap-2 text-xs"><span class="w-14 text-slate-500">Errors</span><div class="flex-1 bg-sand/60 rounded-full h-2"><div id="bar-bottleneck-error" class="poll-bar bg-rose-500"></div></div><span id="pct-bottleneck-error" class="w-8 text-right font-mono text-slate-600">0%</span></div>
                     </div>
-                    <p class="mt-2 text-[11px] text-slate-500">Votes: <span id="total-votes-bottleneck">0</span> <span id="poll-status-bottleneck" class="hidden text-emerald-400">· You voted ✓ <button id="poll-change-bottleneck" class="underline hover:text-white">change</button></span></p>
+                    <p class="mt-2 text-[11px] text-slate-500">Votes: <span id="total-votes-bottleneck">0</span> <span id="poll-status-bottleneck" class="hidden text-sky-700">· You voted ✓ <button id="poll-change-bottleneck" class="underline hover:text-slate-800">change</button></span></p>
                 </div>
             </section>
 
@@ -182,26 +181,26 @@
     </div>
 
     <!-- Welcome popup (shown on every visit, one tap to dismiss) -->
-    <div id="welcome-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-700 rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
+    <div id="welcome-modal" class="fixed inset-0 z-50 bg-stone-900/50 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-card border border-mist rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
             <div class="text-4xl mb-2">🧬</div>
-            <h2 class="text-xl font-bold text-white">Welcome to GENO_BYTE!</h2>
-            <p class="text-sm text-slate-400 mt-2 leading-relaxed">
-                DNA isn't just the code of life — it can store <strong class="text-slate-200">your data</strong> too.
+            <h2 class="text-xl font-bold text-slate-800">Welcome to GENO_BYTE!</h2>
+            <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+                DNA isn't just the code of life — it can store <strong class="text-slate-700">your data</strong> too.
             </p>
-            <ul class="text-sm text-slate-300 mt-4 space-y-2 text-left">
+            <ul class="text-sm text-slate-600 mt-4 space-y-2 text-left">
                 <li>1️⃣ &nbsp;Turn any message into DNA letters</li>
                 <li>2️⃣ &nbsp;See how little your data would weigh</li>
                 <li>3️⃣ &nbsp;Vote in the quick poll</li>
             </ul>
-            <button id="btn-start" class="mt-6 w-full py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold transition-colors">
+            <button id="btn-start" class="mt-6 w-full py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold transition-colors">
                 Let's Go ▶
             </button>
         </div>
     </div>
 
     <!-- Toast -->
-    <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-slate-800 border border-cyan-600/50 text-white text-sm px-4 py-2.5 rounded-xl shadow-lg opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <div id="toast" class="fixed bottom-4 left-1/2 -translate-x-1/2 bg-stone-800 border border-orange-500/60 text-white text-sm px-4 py-2.5 rounded-xl shadow-lg opacity-0 pointer-events-none transition-opacity duration-300"></div>
 
     <script src="script.js"></script>
 </body>

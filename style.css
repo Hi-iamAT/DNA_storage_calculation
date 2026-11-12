@@ -1,42 +1,98 @@
-/* GENO_BYTE — simple stylesheet */
+/* GENO_BYTE — light blue × warm orange theme */
 
-/* DNA base colors */
-.dna-a { color: #fb7185; }
-.dna-c { color: #38bdf8; }
-.dna-g { color: #34d399; }
-.dna-t { color: #fbbf24; }
+/* Palette */
+:root {
+    --page-top: #dcebf9;      /* soft light blue   */
+    --page-bottom: #f7efe2;   /* warm sand (mix)   */
+    --card: #fdfeff;          /* near-white blue   */
+    --mist: #c9dcee;          /* blue-gray borders */
+    --inset: #eef5fc;         /* light blue inset  */
+    --ink: #334155;           /* slate text        */
+}
+
+/* Page: light blue blending into warm sand */
+.bg-page {
+    background: linear-gradient(165deg, var(--page-top) 0%, var(--page-bottom) 100%);
+    background-attachment: fixed;
+}
+.bg-card  { background-color: var(--card); }
+.bg-inset { background-color: var(--inset); }
+.border-mist { border-color: var(--mist); }
+.shadow-soft { box-shadow: 0 2px 12px rgba(37, 99, 235, 0.08); }
+
+/* DNA base colors (readable on light blue) */
+.dna-a { color: #e11d48; } /* Adenine  – rose    */
+.dna-c { color: #0284c7; } /* Cytosine – sky     */
+.dna-g { color: #059669; } /* Guanine  – emerald */
+.dna-t { color: #d97706; } /* Thymine  – amber   */
+
+/* Input / output boxes */
+.field {
+    background: var(--card);
+    border: 1px solid var(--mist);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    color: var(--ink);
+    outline: none;
+    transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.field:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+
+.output-box {
+    background: var(--inset);
+    border: 1px solid var(--mist);
+    border-radius: 0.75rem;
+    padding: 0.65rem 1rem;
+    word-break: break-word;
+}
 
 /* Preset buttons (data weight card) */
 .preset-btn {
     padding: 0.65rem 0.5rem;
     border-radius: 0.75rem;
-    border: 1px solid #334155;
-    background: #0f172a;
-    color: #e2e8f0;
+    border: 1px solid var(--mist);
+    background: #f0f6fc;
+    color: var(--ink);
     font-size: 0.8rem;
     font-weight: 600;
     line-height: 1.4;
     transition: background 0.15s ease, border-color 0.15s ease;
 }
 .preset-btn:hover {
-    background: #1e293b;
-    border-color: #06b6d4;
+    background: #e3eefa;
+    border-color: #f97316;
 }
 
 /* Poll vote buttons */
 .vote-btn {
     padding: 0.6rem 0.5rem;
     border-radius: 0.75rem;
-    border: 1px solid #334155;
-    background: #0f172a;
-    color: #e2e8f0;
+    border: 1px solid var(--mist);
+    background: #f0f6fc;
+    color: var(--ink);
     font-size: 0.85rem;
     font-weight: 600;
     transition: background 0.15s ease, border-color 0.15s ease;
 }
 .vote-btn:hover {
-    border-color: #06b6d4;
+    border-color: #f97316;
 }
+
+/* Small header action button (Copy) */
+.mini-btn {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 0.6rem;
+    border: 1px solid var(--mist);
+    background: #f0f6fc;
+    color: var(--ink);
+    transition: background 0.15s ease;
+}
+.mini-btn:hover { background: #e3eefa; }
 
 /* Poll result bars */
 .poll-bar {
@@ -44,6 +100,20 @@
     width: 0%;
     border-radius: 9999px;
     transition: width 0.4s ease;
+}
+
+/* DNA helix banner — blue-to-warm glow */
+#helix-box {
+    height: 170px;
+    background: radial-gradient(circle at 50% 45%, #eaf3fc 0%, #f5edde 100%);
+}
+@media (max-width: 380px) {
+    #helix-box { height: 140px; }
+}
+#helixCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
 /* Hide number input spinners (cleaner on phones) */
@@ -55,19 +125,6 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
     -moz-appearance: textfield;
     appearance: textfield;
-}
-
-/* DNA helix banner */
-#helix-box {
-    height: 170px;
-}
-@media (max-width: 380px) {
-    #helix-box { height: 140px; }
-}
-#helixCanvas {
-    width: 100%;
-    height: 100%;
-    display: block;
 }
 
 /* Never allow horizontal page scroll on phones */

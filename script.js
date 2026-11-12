@@ -334,10 +334,10 @@ function loadVotes() {
 // ============================================================================
 
 const HELIX_BASE_COLORS = {
-    A: { fill: '#fb7185', glow: 'rgba(251,113,133,0.6)' },
-    C: { fill: '#38bdf8', glow: 'rgba(56,189,248,0.6)' },
-    G: { fill: '#34d399', glow: 'rgba(52,211,153,0.6)' },
-    T: { fill: '#fbbf24', glow: 'rgba(251,191,36,0.6)' }
+    A: { fill: '#fb7185', glow: 'rgba(225,29,72,0.30)' },
+    C: { fill: '#60a5fa', glow: 'rgba(37,99,235,0.35)' },
+    G: { fill: '#34d399', glow: 'rgba(5,150,105,0.30)' },
+    T: { fill: '#fbbf24', glow: 'rgba(249,115,22,0.35)' }
 };
 
 function initHelix() {
@@ -385,9 +385,9 @@ function initHelix() {
             .sort((a, b) => a.z - b.z);
 
         for (const { p1, p2, z } of rungs) {
-            const alpha = 0.35 + (z + 1) * 0.3;
+            const alpha = 0.45 + (z + 1) * 0.3;
             const isCG = p1.base === 'C' || p1.base === 'G';
-            ctx.strokeStyle = isCG ? `rgba(6,182,212,${alpha * 0.7})` : `rgba(251,191,36,${alpha * 0.6})`;
+            ctx.strokeStyle = isCG ? `rgba(59,130,246,${alpha * 0.7})` : `rgba(249,115,22,${alpha * 0.65})`;
             ctx.lineWidth = isCG ? 2.2 : 1.6;
             ctx.setLineDash(isCG ? [4, 3] : [6, 4]);
             ctx.beginPath();
@@ -399,8 +399,8 @@ function initHelix() {
             drawBase(ctx, p2, alpha);
         }
 
-        drawStrand(ctx, strandA, '#22d3ee');
-        drawStrand(ctx, strandB, '#a78bfa');
+        drawStrand(ctx, strandA, '#3b82f6');
+        drawStrand(ctx, strandB, '#f97316');
 
         requestAnimationFrame(draw);
     }
@@ -414,16 +414,16 @@ function initHelix() {
         const grad = ctx.createRadialGradient(p.x - r * 0.3, p.y - r * 0.3, r * 0.1, p.x, p.y, r);
         grad.addColorStop(0, '#ffffff');
         grad.addColorStop(0.35, color.fill);
-        grad.addColorStop(1, '#050811');
+        grad.addColorStop(1, '#5b6b80');
         ctx.fillStyle = grad;
         ctx.shadowColor = color.glow;
-        ctx.shadowBlur = scale > 1 ? 10 : 3;
+        ctx.shadowBlur = scale > 1 ? 8 : 2;
         ctx.beginPath();
         ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
         ctx.fill();
         if (p.z > 0.2) {
             ctx.shadowBlur = 0;
-            ctx.fillStyle = '#fff';
+            ctx.fillStyle = '#1c1917';
             ctx.font = `bold ${Math.round(7.5 * scale)}px monospace`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
