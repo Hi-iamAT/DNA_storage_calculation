@@ -346,7 +346,7 @@ function applyServerRows(rows) {
     };
 
     const note = document.getElementById('poll-live-note');
-    if (note) note.innerHTML = `👥 <strong class="text-slate-800">${voters.size}</strong> ${voters.size === 1 ? 'person has' : 'people have'} voted · <span class="text-orange-600 font-semibold">LIVE</span>`;
+    if (note) note.innerHTML = `👥 <strong class="text-slate-800">${voters.size}</strong> ${voters.size === 1 ? 'person has' : 'people have'} voted · <span class="live-dot"></span><span class="text-orange-600 font-semibold">LIVE</span>`;
 }
 
 function setOfflineMode(message) {
