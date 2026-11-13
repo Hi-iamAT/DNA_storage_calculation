@@ -616,12 +616,105 @@ function initWelcome() {
 // 8. BOOT
 // ============================================================================
 
+// 8. BACKGROUND PARTICLES (gentle floating DNA motes, very low opacity)
+// ============================================================================
+
+function initBgParticles() {
+    const canvas = document.getElementById('bg-particles');
+    if (!canvas) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; // respect user preference
+
+    const ctx = canvas.getContext('2d');
+    const LETTERS = ['A', 'C', 'G', 'T'];
+    const COLORS = ['59,130,246', '249,115,22']; // theme blue & orange (as R,G,B strings)
+
+    const isSmall = window.innerWidth < 640;
+    const COUNT = isSmall ? 30 : 55;           // keep it light on phones
+    const LINK_DIST = isSmall ? 100 : 145;
+
+    const particles = [];
+    for (let i = 0; i < COUNT; i++) {
+        const isLetter = Math.random() < 0.22; // a few particles are DNA letters
+        particles.push({
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+            vx: (Math.random() - 0.5) * 0.25,
+            vy: (Math.random() - 0.5) * 0.25,
+            r: isLetter ? 0 : 1.5 + Math.random() * 3,
+            letter: isLetter ? LETTERS[i % 4] : null,
+            size: isLetter ? 13 + Math.random() * 6 : 0,
+            color: COLORS[i % COLORS.length],
+            alpha: 0.18 + Math.random() * 0.12
+        });
+    }
+
+    function resize() {
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function step() {
+        if (document.hidden) { requestAnimationFrame(step); return; } // pause when tab hidden
+        const w = window.innerWidth, h = window.innerHeight;
+        ctx.clearRect(0, 0, w, h);
+
+        // faint lines between nearby particles — molecule feel
+        ctx.lineWidth = 1;
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const a = particles[i], b = particles[j];
+                const dx = a.x - b.x, dy = a.y - b.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < LINK_DIST) {
+                    const linkAlpha = (1 - dist / LINK_DIST) * 0.10;
+                    ctx.strokeStyle = `rgba(59,130,246,${linkAlpha})`;
+                    ctx.beginPath();
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(b.x, b.y);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        // drift + draw
+        for (const p of particles) {
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.x < -20) p.x = w + 20; else if (p.x > w + 20) p.x = -20;
+            if (p.y < -20) p.y = h + 20; else if (p.y > h + 20) p.y = -20;
+
+            if (p.letter) {
+                ctx.font = `${p.size}px ui-sans-serif, system-ui, sans-serif`;
+                ctx.fillStyle = `rgba(${p.color},${p.alpha + 0.08})`;
+                ctx.fillText(p.letter, p.x, p.y);
+            } else {
+                ctx.fillStyle = `rgba(${p.color},${p.alpha})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+}
+
+// ============================================================================
+// 9. BOOT
+// ============================================================================
+
 document.addEventListener('DOMContentLoaded', () => {
     loadVotes();
     initConverter();
     initCalculator();
     initPoll();
     initHelix();
+    initBgParticles();
     initWelcome();
     updateWeight(256); // sensible starting example
 });
